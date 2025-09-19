@@ -10,260 +10,244 @@
 
 <style>
   :root{
-    --bg:#070a1a; --bg2:#0c163d; --card:#0b122dcc; --line:#21306e; 
-    --white:#f6fbff; --muted:#bfe3ff; --accent:#7dd3fc; --gold:#ffd166; --chip:#0d1846cc;
+    --bg:#050812;
+    --grad1:#0e1a45;
+    --grad2:#09102b;
+    --card:#0a1230e6;
+    --line:#22337a;
+    --txt:#eaf6ff;
+    --muted:#bfe4ff;
+    --accent:#7dd3fc;
+    --gold:#ffd166;
   }
-  html,body{height:100%;margin:0;background:radial-gradient(1200px 800px at 70% -10%, #1a2a6b 0%, #070a1a 55%) fixed;color:var(--white)}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--grad1),var(--grad2));color:var(--txt)}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
-  /* Канвасы эффектов */
-  #fx,#confetti{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-
-  /* Мягкое свечение */
-  .glow{position:fixed;inset:-20vmin;z-index:1;pointer-events:none;
+  /* Слои эффектов */
+  #fw-front{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;mix-blend-mode:screen;}
+  #confetti{position:fixed;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;}
+  .glow{position:fixed;inset:-25vmin;z-index:1;pointer-events:none;
     background:
-      radial-gradient(60vmin 40vmin at 15% 10%, #1e3a8a33 0 60%, transparent 70%),
-      radial-gradient(40vmin 30vmin at 90% 8%, #00b4f033 0 60%, transparent 70%);
-    filter:blur(10px);
+      radial-gradient(55vmin 40vmin at 15% 12%, #1e3a8a33 0 60%, transparent 70%),
+      radial-gradient(45vmin 30vmin at 90% 8%, #00b4f033 0 60%, transparent 70%);
+    filter:blur(14px);
   }
 
-  /* Контент */
-  .wrap{position:relative;z-index:2;min-height:100%;display:flex;align-items:center;justify-content:center;padding:16px}
+  /* Контент — полностью мобильный */
+  .wrap{position:relative;z-index:6;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:14px}
   .card{
     width:min(760px,94vw);
-    border-radius:28px; border:1px solid var(--line);
-    background:linear-gradient(180deg, var(--card), #0b132fdd);
+    border-radius:22px;
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--card),#0b1434f2);
+    box-shadow:0 22px 60px #000a, inset 0 0 0 1px #ffffff18;
     backdrop-filter:blur(10px);
-    padding:18px 16px 20px;
-    box-shadow:0 24px 80px #000a, inset 0 0 0 1px #ffffff13;
-    position:relative; overflow:hidden;
+    padding:14px 14px 18px;
   }
 
-  .top{
-    display:flex; gap:14px; align-items:center; margin-bottom:6px;
-  }
-  .avatar{
-    flex:0 0 auto; width:72px; height:72px; border-radius:50%;
-    background:radial-gradient(60% 60% at 50% 40%, #2a3a80 0, #0f1a45 70%);
-    border:2px solid #2c3d86; box-shadow:0 6px 18px #000a, inset 0 0 0 1px #ffffff22;
-    overflow:hidden; position:relative;
-  }
+  .head{display:flex;gap:12px;align-items:center;margin-bottom:6px}
+  .avatar{flex:0 0 auto;width:72px;height:72px;border-radius:50%;overflow:hidden;position:relative;
+    border:2px solid #2c3d86;box-shadow:0 6px 18px #000a,inset 0 0 0 1px #ffffff22;background:#11215a}
   .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-  .avatar .fallback{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font:800 26px/1 "Montserrat",system-ui;color:#dff6ff77;
-  }
+  .avatar .fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font:800 26px/1 "Montserrat",system-ui;color:#dff6ff77}
 
-  .title{
-    font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    font-size:clamp(22px,6.5vw,40px); line-height:1.12; margin:2px 0 4px;
-    text-shadow:0 2px 12px #000a, 0 0 24px #3fc3ff66;
-    letter-spacing:.2px;
-  }
-  .subtitle{
-    font-family:"Inter",system-ui; font-weight:600;
-    color:var(--muted); font-size:clamp(13px,3.6vw,16px);
-  }
+  .title{font:800 clamp(22px,7vw,40px)/1.12 "Montserrat",system-ui; margin:0 0 2px;
+    text-shadow:0 2px 12px #000a,0 0 24px #44c5ff66}
+  .subtitle{font:600 clamp(12px,3.6vw,15px)/1.2 "Inter",system-ui;color:var(--muted)}
 
-  .typed-line{
-    margin:10px 2px 14px; font-family:"Inter",system-ui; 
-    font-weight:700; letter-spacing:.2px;
-    font-size:clamp(16px,5vw,22px); color:var(--gold);
-    min-height:1.6em;
-  }
-  .typed-caret{display:inline-block;width:1ch;border-right:2px solid var(--gold);animation:blink 1s steps(1,end) infinite}
+  /* Печатающаяся строка */
+  .typed{margin:10px 2px 12px;font:800 clamp(17px,5.6vw,22px)/1.35 "Inter",system-ui;color:var(--gold);min-height:1.7em}
+  .caret{display:inline-block;width:1ch;border-right:2px solid var(--gold);animation:blink 1s steps(1,end) infinite}
   @keyframes blink{50%{border-color:transparent}}
 
-  .text{
-    font-family:"Inter",system-ui; font-size:clamp(15px,4.4vw,18px);
-    line-height:1.65; color:#e9f5ff; margin:0 2px 12px;
-  }
+  .text{font:400 clamp(15px,4.4vw,18px)/1.65 "Inter",system-ui;margin:0 2px 10px}
+  .sign{margin-top:8px;color:var(--accent);font:800 clamp(15px,4.8vw,19px)/1 "Inter",system-ui}
 
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
-  .chip{
-    font:600 clamp(12px,3.5vw,14px)/1 "Inter",system-ui; color:#dff6ff;
-    padding:8px 12px;border-radius:999px;background:linear-gradient(180deg,var(--chip),#0a1336cc);
-    border:1px solid #27377d; box-shadow:0 8px 20px #0008, inset 0 0 0 1px #ffffff1a;
-  }
+  /* Адаптивные отступы */
+  @media (min-width:560px){ .card{padding:16px 16px 20px} }
 
-  .sign{margin-top:10px;color:var(--accent);font-weight:700;
-    font-size:clamp(15px,4.6vw,19px)}
-
-  /* Искры в карточке */
-  .sparks{position:absolute;inset:0;pointer-events:none;border-radius:inherit;overflow:hidden}
-  .spark{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;
-    filter:drop-shadow(0 0 6px #9ef2ff);opacity:.9}
-
-  /* Плавные появления */
-  .fade1{opacity:0;transform:translateY(10px);animation:fade .9s ease-out .1s forwards}
-  .fade2{opacity:0;transform:translateY(8px);animation:fade .9s ease-out .22s forwards}
-  .fade3{opacity:0;transform:translateY(6px);animation:fade .9s ease-out .34s forwards}
-  @keyframes fade{to{opacity:1;transform:none}}
-
+  /* Уважение к пользователю */
   @media (prefers-reduced-motion:reduce){
-    #fx,#confetti,.sparks{display:none}
-    .fade1,.fade2,.fade3{animation:none;opacity:1;transform:none}
-    .typed-caret{display:none}
+    #fw-front,#confetti{display:none}
+    .caret{display:none}
   }
 </style>
 </head>
 <body>
   <!-- Эффекты -->
-  <canvas id="fx"></canvas>
+  <canvas id="fw-front"></canvas>
   <canvas id="confetti"></canvas>
   <div class="glow" aria-hidden="true"></div>
 
   <!-- Контент -->
-  <div class="wrap">
-    <section class="card">
-      <div class="top fade1">
+  <main class="wrap">
+    <section class="card" role="article" aria-label="Поздравление">
+      <header class="head">
         <div class="avatar">
-          <!-- Положи рядом файл sergey.jpg или поменяй путь -->
-          <img src="sergey.jpg" alt="Сергей Валентинович" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <!-- Скрипт ниже сам подберёт существующее имя файла -->
+          <img id="photo" alt="Сергей Валентинович">
           <div class="fallback">СВ</div>
         </div>
         <div>
           <h1 class="title">С днём рождения, Сергей&nbsp;Валентинович!</h1>
-          <div class="subtitle">Поздравляют: Анатолий и Ирина</div>
+          <div class="subtitle">Анатолий и Ирина — с лучами добра и огоньком настроения</div>
         </div>
-      </div>
+      </header>
 
-      <!-- Печатающийся/стирающийся «прикол» -->
-      <div class="typed-line fade2" id="typed">
-        <span id="typedText"></span><span class="typed-caret"></span>
-      </div>
+      <div class="typed"><span id="typedText"></span><span class="caret"></span></div>
 
-      <p class="text fade3">
-        Желаем драйва и мощного здоровья, планов — как шампур: только сочные куски, без лишнего.
-        Пусть банька — +100° и 0° проблем, мангал — без «угли отсырели», а выходные — как хороший плейлист:
-        <i>хиты идут один за другим</i>.
+      <p class="text">
+        Желаем мощного здоровья, лёгких побед и ровного огня в делах. Пусть банька всегда в тонусе,
+        мангал — без дыма в глаза, а выходные — сплошные «вау-момents».
       </p>
-      <p class="text fade3">
-        Улыбок, удачи в делах и ярких моментов с близкими. Пусть каждый новый год жизни —
-        как идеальный маринад: делает всё только вкуснее!
+      <p class="text">
+        Пусть новый год жизни качает как любимый трек: громко, чисто и на повторе. Больше смеха, вкусных встреч
+        и поводов для гордости!
       </p>
 
-      <div class="chips fade3" aria-hidden="true">
-        <span class="chip">Здоровья × Сила</span>
-        <span class="chip">Бани и мангалы</span>
-        <span class="chip">Семейного тепла</span>
-        <span class="chip">Удачи каждый день</span>
-      </div>
-
-      <p class="sign fade3">Анатолий и Ирина</p>
-
-      <div class="sparks" id="sparks"></div>
+      <p class="sign">С теплом — Анатолий и Ирина</p>
     </section>
-  </div>
+  </main>
 
 <script>
-/* ===== Утилиты ===== */
-const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
-
-/* ===== Retina Canvas ===== */
-function fitCanvas(c){
-  const dpr = Math.max(1, Math.min(2, window.devicePixelRatio||1));
-  const w = window.innerWidth, h = window.innerHeight;
-  c.width = Math.floor(w*dpr); c.height = Math.floor(h*dpr);
-  c.style.width=w+'px'; c.style.height=h+'px';
-  const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
-  return {ctx};
-}
-
-/* ===== Фейерверки ===== */
-(()=>{const c=document.getElementById('fx'); let {ctx}=fitCanvas(c);
-let W=c.clientWidth, H=c.clientHeight; const rockets=[],parts=[];
-const G=.12,FR=.985; function resize(){({ctx}=fitCanvas(c)); W=c.clientWidth; H=c.clientHeight}
-addEventListener('resize',resize,{passive:true});
-
-function spawnRocket(){const x=Math.random()*W*.8+W*.1, y=H+8, vx=(Math.random()-.5)*1.1, vy=-(Math.random()*3+6), hue=(Math.random()*360)|0;
-  rockets.push({x,y,vx,vy,hue,peak:Math.random()*H*.4+H*.25});}
-function burst(x,y,h){for(let i=0;i<120;i++){const a=i/120*Math.PI*2+Math.random()*.12, s=Math.random()*3.4+1.6;
-  parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:Math.random()*60+40,age:0,h:h+(Math.random()*28-14),r:Math.random()*1.8+.7});}}
-let last=performance.now();
-(function loop(now){
-  const dt=clamp((now-last)/16.67,.5,1.5); last=now;
-  ctx.fillStyle="rgba(7,10,26,.28)"; ctx.fillRect(0,0,W,H);
-  if(rockets.length<3&&Math.random()<.06)spawnRocket();
-  for(let i=rockets.length-1;i>=0;i--){const r=rockets[i]; r.x+=r.vx*dt; r.y+=r.vy*dt; r.vy+=G*.35*dt;
-    ctx.beginPath(); ctx.moveTo(r.x,r.y); ctx.lineTo(r.x-r.vx*3,r.y-r.vy*3);
-    ctx.strokeStyle=`hsl(${r.hue},100%,70%)`; ctx.lineWidth=1.4; ctx.stroke();
-    if(r.y<=r.peak||r.vy>=0){burst(r.x,r.y,r.hue); rockets.splice(i,1);}
+/* ====== Фото: умная подгрузка (пробуем разные имена) ====== */
+(function loadPhoto(){
+  const img = document.getElementById('photo');
+  const candidates = ["./sergey.jpg","./sergey.JPG","./sergey.jpeg","sergey.jpg","sergey.JPG","sergey.jpeg"];
+  let i = 0;
+  function tryNext(){
+    if(i >= candidates.length){ return; }
+    img.onerror = () => { i++; tryNext(); };
+    img.src = candidates[i] + "?v=" + Date.now(); // анти-кэш
   }
-  for(let i=parts.length-1;i>=0;i--){const p=parts[i]; p.age+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt;
-    p.vx*=Math.pow(FR,dt); p.vy*=Math.pow(FR,dt); p.vy+=G*dt;
-    const a=1-p.age/p.life; if(a<=0){parts.splice(i,1);continue;}
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fillStyle=`hsla(${p.h},100%,65%,${a})`; ctx.fill();
-  }
-  requestAnimationFrame(loop);
-})(performance.now());
+  tryNext();
 })();
 
-/* ===== Конфетти ===== */
-(()=>{const c=document.getElementById('confetti'); let {ctx}=fitCanvas(c);
-let W=c.clientWidth,H=c.clientHeight; function resize(){({ctx}=fitCanvas(c)); W=c.clientWidth; H=c.clientHeight}
-addEventListener('resize',resize,{passive:true});
-const COLORS=['#ffd166','#7dd3fc','#a7f3d0','#fca5a5','#c7d2fe','#fde68a','#f9a8d4'];
-const pieces=[];
-function burst(n=90){const cx=Math.random()*W*.6+W*.2, cy=H*.15+Math.random()*H*.2;
-  for(let i=0;i<n;i++){const ang=Math.random()*6.283, sp=Math.random()*4+2;
-    pieces.push({x:cx,y:cy,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp*.6,g:.08+Math.random()*.08,w:6+Math.random()*6,h:10+Math.random()*10,rot:Math.random()*6.283,vr:(Math.random()-.5)*.2,c:COLORS[(Math.random()*COLORS.length)|0],life:180+(Math.random()*80|0),age:0});}}
-setInterval(()=>burst(80+(Math.random()*40|0)),3200+(Math.random()*800|0));
-setTimeout(()=>burst(120),700);
-let last=performance.now();
-(function loop(now){
-  const dt=clamp((now-last)/16.67,.5,1.5); last=now;
-  ctx.clearRect(0,0,W,H);
-  for(let i=pieces.length-1;i>=0;i--){const p=pieces[i]; p.age+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=p.g*dt; p.rot+=p.vr*dt;
-    const flip=Math.cos(p.rot); ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
-    ctx.globalAlpha=.9*(1-p.age/p.life)*(0.7+Math.abs(flip)*0.3); ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
-    if(p.age>=p.life||p.y>H+40) pieces.splice(i,1);
+/* ====== Фейерверки (передний слой, blend: screen) ====== */
+(function fireworks(){
+  const c = document.getElementById('fw-front');
+  const ctx = c.getContext('2d');
+  function fit(){
+    const dpr = Math.max(1, Math.min(2, devicePixelRatio||1));
+    c.width = Math.floor(innerWidth*dpr); c.height = Math.floor(innerHeight*dpr);
+    c.style.width = innerWidth+'px'; c.style.height = innerHeight+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  requestAnimationFrame(loop);
-})(performance.now());
-})();
+  fit(); addEventListener('resize', fit, {passive:true});
 
-/* ===== Искорки на карточке ===== */
-(()=>{const box=document.getElementById('sparks'); const N=22;
-for(let i=0;i<N;i++){const s=document.createElement('div'); s.className='spark';
-  s.style.left=(Math.random()*96+2)+'%'; s.style.top=(Math.random()*96+2)+'%';
-  const dur=6+Math.random()*6, dx=(Math.random()*2-1)*8, dy=(Math.random()*2-1)*8;
-  s.animate([{transform:'translate(0,0)',opacity:.9},{transform:`translate(${dx}px,${dy}px)`,opacity:.35}],
-    {duration:dur*1000,direction:'alternate',iterations:Infinity,easing:'ease-in-out'});
-  box.appendChild(s);}
-})();
+  let W = () => c.clientWidth, H = () => c.clientHeight;
+  const rockets = [], parts = [];
+  const G=.12, FR=.985;
 
-/* ===== Печатающийся / стирающийся текст ===== */
-(()=> {
-  const target = document.getElementById('typedText');
-  const phrases = [
-    "Сегодня ты — шеф банного пара и главный по мангалу!",
-    "Настроение — как угли: жаркое и долгое 🔥",
-    "Пусть жизнь жарится ровно, без «переворачивай быстрее!»",
-    "В баньке — +100°, в делах — +200% к результату 💪",
-    "Планы — как шампур: только сочные куски!"
-  ];
-  const typeSpeed = 42;        // скорость печати (мс на символ)
-  const holdAfterType = 1100;  // пауза после допечатывания (мс)
-  const eraseSpeed = 26;       // скорость стирания
-  const holdAfterErase = 420;  // пауза после удаления
-
-  let i=0, text="", typing=true, idx=0;
-  function step(){
-    const full = phrases[i];
-    if(typing){
-      text = full.slice(0, ++idx);
-      target.textContent = text;
-      if(idx === full.length){ typing=false; setTimeout(step, holdAfterType); return; }
-      setTimeout(step, typeSpeed);
-    }else{
-      text = full.slice(0, --idx);
-      target.textContent = text;
-      if(idx === 0){ typing=true; i=(i+1)%phrases.length; setTimeout(step, holdAfterErase); return; }
-      setTimeout(step, eraseSpeed);
+  function spawnRocket(){
+    const x = Math.random()*W()*0.8 + W()*0.1;
+    const y = H()+10;
+    const vx = (Math.random()-.5)*1.2;
+    const vy = -(Math.random()*3 + 6);
+    const hue = (Math.random()*360)|0;
+    const peak = Math.random()*H()*.4 + H()*.25;
+    rockets.push({x,y,vx,vy,hue,peak});
+  }
+  function burst(x,y,hue){
+    const n=120;
+    for(let i=0;i<n;i++){
+      const a = i/n*Math.PI*2 + Math.random()*.12;
+      const s = Math.random()*3.5 + 1.6;
+      parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:60+Math.random()*60,age:0,h:hue+(Math.random()*28-14),r:.8+Math.random()*1.7});
     }
   }
-  step();
+  let last = performance.now();
+  function loop(now){
+    const dt = Math.max(.5, Math.min(1.5, (now-last)/16.67)); last = now;
+
+    // лёгкое затухание, чтобы были шлейфы, но без «мигания»
+    ctx.fillStyle = "rgba(5,8,18,0.20)";
+    ctx.fillRect(0,0,W(),H());
+
+    if(rockets.length<3 && Math.random()<.07) spawnRocket();
+    for(let i=rockets.length-1;i>=0;i--){
+      const r=rockets[i];
+      r.x += r.vx*dt; r.y += r.vy*dt; r.vy += G*.35*dt;
+
+      // яркий трассер
+      ctx.beginPath(); ctx.moveTo(r.x,r.y); ctx.lineTo(r.x-r.vx*3, r.y-r.vy*3);
+      ctx.strokeStyle = `hsl(${r.hue},100%,75%)`; ctx.lineWidth = 1.6; ctx.stroke();
+
+      if(r.y<=r.peak || r.vy>=0){ burst(r.x,r.y,r.hue); rockets.splice(i,1); }
+    }
+
+    for(let i=parts.length-1;i>=0;i--){
+      const p=parts[i]; p.age+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vx*=Math.pow(FR,dt); p.vy*=Math.pow(FR,dt); p.vy+=G*dt;
+      const a = 1 - p.age/p.life; if(a<=0){ parts.splice(i,1); continue; }
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fillStyle = `hsla(${p.h},100%,65%,${a})`; ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ====== Конфетти (под салютом, но над фоном) ====== */
+(function confetti(){
+  const c = document.getElementById('confetti'); const ctx = c.getContext('2d');
+  function fit(){
+    const dpr=Math.max(1,Math.min(2,devicePixelRatio||1));
+    c.width=Math.floor(innerWidth*dpr); c.height=Math.floor(innerHeight*dpr);
+    c.style.width=innerWidth+'px'; c.style.height=innerHeight+'px'; ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  fit(); addEventListener('resize',fit,{passive:true});
+  let W=()=>c.clientWidth,H=()=>c.clientHeight;
+
+  const COLORS=['#ffd166','#7dd3fc','#a7f3d0','#fca5a5','#c7d2fe','#fde68a','#f9a8d4'];
+  const pieces=[];
+  function burst(n=80){const cx=Math.random()*W()*.6+W()*.2, cy=H()*.2+Math.random()*H()*.2;
+    for(let i=0;i<n;i++){const a=Math.random()*6.283, s=Math.random()*4+2;
+      pieces.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s*.6,g:.08+Math.random()*.08,w:6+Math.random()*6,h:10+Math.random()*10,rot:Math.random()*6.283,vr:(Math.random()-.5)*.2,c:COLORS[(Math.random()*COLORS.length)|0],life:160+(Math.random()*80|0),age:0});}}
+  setInterval(()=>burst(80+(Math.random()*40|0)),3200+(Math.random()*900|0));
+  setTimeout(()=>burst(120),600);
+
+  let last=performance.now();
+  function loop(now){
+    const dt=Math.max(.5,Math.min(1.5,(now-last)/16.67)); last=now;
+    ctx.clearRect(0,0,W(),H());
+    for(let i=pieces.length-1;i>=0;i--){
+      const p=pieces[i]; p.age+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=p.g*dt; p.rot+=p.vr*dt;
+      const flip=Math.cos(p.rot);
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha=.9*(1-p.age/p.life)*(0.7+Math.abs(flip)*0.3); ctx.fillStyle=p.c;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+      if(p.age>=p.life||p.y>H()+40) pieces.splice(i,1);
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ====== Печатается → пауза → стирается ====== */
+(function typer(){
+  const node = document.getElementById('typedText');
+  const phrases = [
+    "Сегодня ты — главный по жару и настроению! 🔥",
+    "В баньке — +100°, в делах — +200% к результату 💪",
+    "Планы — как шампур: только сочные куски!",
+    "Пусть выходные — сплошные «вау-момents» 😎"
+  ];
+  const typeMs = 42, eraseMs = 26, holdAfterType = 1100, holdAfterErase = 380;
+  let i=0, idx=0, typing=true;
+
+  function tick(){
+    const full = phrases[i];
+    if(typing){
+      idx++; node.textContent = full.slice(0, idx);
+      if(idx >= full.length){ typing=false; setTimeout(tick, holdAfterType); return; }
+      setTimeout(tick, typeMs);
+    }else{
+      idx--; node.textContent = full.slice(0, idx);
+      if(idx <= 0){ typing=true; i=(i+1)%phrases.length; setTimeout(tick, holdAfterErase); return; }
+      setTimeout(tick, eraseMs);
+    }
+  }
+  tick();
 })();
 </script>
 </body>
