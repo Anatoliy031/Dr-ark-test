@@ -1,763 +1,460 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С днём рождения, Сергей Валентинович!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>С днём рождения, Сергей Валентинович!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg1:#667eea;--bg2:#764ba2;--glass:rgba(255,255,255,.95);--accent:#ff6b6b}
+    body{min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2));font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;overflow-x:hidden;position:relative}
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow-x: hidden;
-            font-family: 'Inter', sans-serif;
-            position: relative;
-        }
+    /* Fireworks canvas (front) */
+    #fw-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:999;pointer-events:none}
 
-        /* Анимированные частицы на фоне */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
+    /* Background particles */
+    .particles{position:fixed;inset:0;pointer-events:none;z-index:1}
+    .particle{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.8);animation:float 15s linear infinite}
+    @keyframes float{0%{transform:translateY(100vh) rotate(0);opacity:0}10%,90%{opacity:1}100%{transform:translateY(-100vh) rotate(360deg);opacity:0}}
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
+    .container{position:relative;z-index:10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+    .birthday-card{
+      width:min(640px,100%);background:var(--glass);backdrop-filter:blur(20px);border-radius:24px;padding:22px;
+      box-shadow:0 25px 50px rgba(0,0,0,.15),0 0 0 1px rgba(255,255,255,.08);
+      transform:translateY(20px);opacity:0;animation:slideUp .8s ease-out .2s forwards;position:relative;overflow:hidden
+    }
+    @keyframes slideUp{to{transform:translateY(0);opacity:1}}
+    .card-decoration{position:absolute;width:160px;height:160px;border-radius:50%;top:-50px;right:-50px;opacity:.08;background:linear-gradient(45deg,#ff6b6b,#ffd93d);animation:pulse 3s ease-in-out infinite}
+    .card-decoration:nth-child(2){top:auto;bottom:-40px;left:-40px;right:auto;background:linear-gradient(45deg,#4ecdc4,#44a08d);animation-delay:1s}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
+    .main-title{
+      font-family:'Dancing Script',cursive;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:700;text-align:center;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px
+    }
+    .subtitle{text-align:center;font-size:1.05rem;color:#666;margin-bottom:18px;font-weight:300}
 
-        /* Основной контейнер */
-        .container {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+    .avatar-container{display:flex;justify-content:center;margin-bottom:18px}
+    .avatar{
+      width:160px;height:160px;border-radius:50%;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+      color:#fff;font-size:3rem;font-weight:800;background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      border:6px solid #fff;box-shadow:0 12px 28px rgba(0,0,0,.18);animation:bounce 2s ease-in-out infinite
+    }
+    .avatar::before{content:"";position:absolute;inset:-50%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.32),transparent);transform:rotate(45deg);animation:shine 3s ease-in-out infinite}
+    .avatar .initials{position:relative;z-index:1}
+    @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-5px)}}
+    @keyframes shine{0%{transform:translate(-100%,-100%) rotate(45deg)}50%{transform:translate(100%,100%) rotate(45deg)}100%{transform:translate(-100%,-100%) rotate(45deg)}}
 
-        /* Карточка поздравления */
-        .birthday-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 1s ease-out 0.5s forwards;
-            position: relative;
-            overflow: hidden;
-        }
+    /* Typewriter */
+    .typewriter{font-size:1.1rem;font-weight:800;color:var(--accent);text-align:center;margin:10px 0 14px;min-height:56px;display:flex;align-items:center;justify-content:center;padding:0 8px}
+    .cursor{display:inline-block;width:2px;background:var(--accent);margin-left:4px;animation:blink 1s infinite}
+    @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
-        @keyframes slideUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+    .wrong{position:relative;color:#d35c5c;text-decoration:line-through;text-decoration-thickness:2px}
+    .message{font-size:1.02rem;line-height:1.65;color:#3a3a3a;text-align:center}
+    .message p{margin-bottom:10px}
+    .signature{text-align:center;font-size:1.08rem;font-weight:700;color:#5263e9;margin-top:16px}
 
-        /* Декоративные элементы */
-        .card-decoration {
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: pulse 3s ease-in-out infinite;
-        }
+    .fireworks-btn{
+      display:block;margin:18px auto 4px;padding:13px 26px;background:linear-gradient(135deg,#ff6b6b,#ffd93d);color:#fff;border:0;border-radius:999px;
+      font-size:1rem;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 10px 22px rgba(255,107,107,.3)
+    }
+    .fireworks-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(255,107,107,.42)}
+    .fireworks-btn:active{transform:translateY(0)}
 
-        .card-decoration:nth-child(2) {
-            top: auto;
-            bottom: -30px;
-            left: -30px;
-            right: auto;
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
-            animation-delay: 1s;
-        }
+    /* Emoji rain (subtle) */
+    .emoji-rain{position:fixed;inset:0;pointer-events:none;z-index:5}
+    .falling-emoji{position:absolute;font-size:22px;animation:fall 4.8s linear forwards}
+    @keyframes fall{from{transform:translateY(-100vh) rotate(0);opacity:1}to{transform:translateY(100vh) rotate(360deg);opacity:0}}
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+    /* Sound/Haptics toggle */
+    .sound-toggle{
+      position:fixed;right:14px;bottom:14px;z-index:1000;
+      background:rgba(0,0,0,.5);backdrop-filter:blur(8px);color:#fff;border:0;border-radius:999px;
+      padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer
+    }
+    .sound-toggle span{font-size:0.92rem;opacity:.9}
+    .sound-toggle .dot{width:8px;height:8px;border-radius:50%;background:#f87171}
+    .sound-on .dot{background:#34d399}
 
-        /* Заголовок */
-        .main-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 700;
-            text-align: center;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 30px;
-            font-weight: 300;
-        }
-
-        /* Аватар */
-        .avatar-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        .avatar {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 4rem;
-            font-weight: 800;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-            animation: bounce 2s ease-in-out infinite;
-            position: relative;
-            overflow: hidden;
-            border: 6px solid white;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .avatar::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s ease-in-out infinite;
-            z-index: 1;
-        }
-
-        .avatar .initials {
-            position: relative;
-            z-index: 2;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-        }
-
-        /* Печатающийся текст */
-        .typewriter {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #ff6b6b;
-            text-align: center;
-            margin-bottom: 25px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cursor {
-            display: inline-block;
-            background-color: #ff6b6b;
-            margin-left: 3px;
-            width: 3px;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        /* Основной текст */
-        .message {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: #444;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .message p {
-            margin-bottom: 15px;
-        }
-
-        /* Подпись */
-        .signature {
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #667eea;
-            margin-top: 30px;
-        }
-
-        /* Интерактивные эмодзи */
-        .emoji-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .falling-emoji {
-            position: absolute;
-            font-size: 24px;
-            animation: fall 4s linear infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Кнопка для запуска салюта */
-        .fireworks-btn {
-            display: block;
-            margin: 30px auto 0;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-        }
-
-        .fireworks-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(255, 107, 107, 0.4);
-        }
-
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .birthday-card {
-                padding: 25px;
-                margin: 10px;
-            }
-            
-            .main-title {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .avatar {
-                width: 150px;
-                height: 150px;
-                font-size: 3rem;
-            }
-            
-            .typewriter {
-                font-size: 1.1rem;
-            }
-            
-            .message {
-                font-size: 1rem;
-            }
-        }
-    </style>
+    @media (max-width:768px){
+      .birthday-card{padding:20px}
+      .avatar{width:132px;height:132px;font-size:2.5rem}
+      .typewriter{font-size:1.02rem;min-height:48px}
+      .message{font-size:.98rem}
+    }
+  </style>
 </head>
 <body>
-    <!-- Анимированные частицы -->
-    <div class="particles" id="particles"></div>
-    
-    <!-- Падающие эмодзи -->
-    <div class="emoji-rain" id="emojiRain"></div>
+  <canvas id="fw-canvas"></canvas>
 
-    <div class="container">
-        <div class="birthday-card">
-            <div class="card-decoration"></div>
-            <div class="card-decoration"></div>
-            
-            <h1 class="main-title">С днём рождения!</h1>
-            <p class="subtitle">Сергей Валентинович</p>
-            
-            <div class="avatar-container">
-                <div class="avatar" id="avatar">
-                    <span class="initials">СВ</span>
-                </div>
-            </div>
-            
-            <div class="typewriter">
-                <span id="typewriter-text"></span>
-                <span class="cursor">&nbsp;</span>
-            </div>
-            
-            <div class="message">
-                <p>Желаем мощного здоровья, лёгких побед и ровного огня в делах! 🔥</p>
-                <p>Пусть банька всегда в тонусе, мангал — без дыма в глаза, а выходные — сплошные «вау-моменты». ✨</p>
-                <p>Пусть новый год жизни качает как любимый трек: громко, чисто и на повторе! Больше смеха, вкусных встреч и поводов для гордости! 🎵</p>
-            </div>
-            
-            <div class="signature">
-                С теплом — Анатолий и Ирина ❤️
-            </div>
-            
-            <button class="fireworks-btn" onclick="createFireworks()">🎆 Запустить салют!</button>
-        </div>
+  <div class="particles" id="particles"></div>
+  <div class="emoji-rain" id="emojiRain"></div>
+
+  <div class="container">
+    <div class="birthday-card">
+      <div class="card-decoration"></div>
+      <div class="card-decoration"></div>
+
+      <h1 class="main-title">С днём рождения!</h1>
+      <p class="subtitle">Сергей Валентинович</p>
+
+      <div class="avatar-container">
+        <div class="avatar" id="avatar"><span class="initials">СВ</span></div>
+      </div>
+
+      <div class="typewriter"><span id="typewriter-text"></span><span class="cursor">&nbsp;</span></div>
+
+      <div class="message">
+        <p>Желаем мощного здоровья, лёгких побед и ровного огня в делах! 🔥</p>
+        <p>Пусть банька всегда в тонусе, мангал — без дыма в глаза, а выходные — сплошные «вау-моменты». ✨</p>
+        <p>Пусть новый год жизни качает как любимый трек: громко, чисто и на повторе! Больше смеха, вкусных встреч и поводов для гордости! 🎵</p>
+      </div>
+
+      <div class="signature">С теплом — Анатолий и Ирина ❤️</div>
+
+      <button class="fireworks-btn" id="fw-btn">🎆 Запустить салют!</button>
     </div>
+  </div>
 
-    <script>
-        // Создание анимированных частиц
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
+  <!-- Звук/вибро -->
+  <button id="soundToggle" class="sound-toggle" aria-pressed="false">
+    <div class="dot"></div>
+    <span>Звук: выкл</span>
+  </button>
+
+<script>
+/* ===== Background particles ===== */
+(function(){
+  const wrap = document.getElementById('particles');
+  const n = 48;
+  for(let i=0;i<n;i++){
+    const d=document.createElement('div');
+    d.className='particle';
+    d.style.left = (Math.random()*100)+'%';
+    d.style.animationDelay = (Math.random()*15)+'s';
+    d.style.animationDuration = (14+Math.random()*10)+'s';
+    wrap.appendChild(d);
+  }
+})();
+
+/* ===== Emoji rain ===== */
+(function(){
+  const emojis = ['🎉','🎂','🎈','🎁','✨','🌟','💫','🎊'];
+  const rain = document.getElementById('emojiRain');
+  function drop(){
+    const e=document.createElement('div');
+    e.className='falling-emoji';
+    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = (Math.random()*100)+'%';
+    e.style.animationDuration = (3.6+Math.random()*2.2)+'s';
+    rain.appendChild(e);
+    setTimeout(()=>e.remove(), 5200);
+  }
+  setInterval(drop, 380);
+})();
+
+/* ===== Avatar loader ===== */
+(function(){
+  const avatar = document.getElementById('avatar');
+  const initials = avatar.querySelector('.initials');
+  const candidates = [
+    "./sergey.jpg","./sergey.JPG","./sergey.jpeg","./sergey.JPEG",
+    "./sergey.png","./sergey.PNG","./sergey.webp","./sergey.WEBP",
+    "sergey.jpg","sergey.JPG","sergey.jpeg","sergey.JPEG",
+    "sergey.png","sergey.PNG","sergey.webp","sergey.WEBP",
+    "./photo.jpg","./photo.JPG","./photo.jpeg","./photo.JPEG",
+    "./photo.png","./photo.PNG","photo.jpg","photo.JPG",
+    "./image.jpg","./image.JPG","image.jpg","image.JPG"
+  ];
+  let i=0;
+  function next(){
+    if(i>=candidates.length) return;
+    const img = new Image();
+    img.onload = () =>{
+      initials.style.display='none';
+      Object.assign(img.style,{position:'absolute',inset:'0',width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%',zIndex:'0',opacity:'0',transition:'opacity .5s'});
+      avatar.appendChild(img);
+      requestAnimationFrame(()=>img.style.opacity='1');
+    };
+    img.onerror = ()=>{ i++; setTimeout(next,10); };
+    img.src = candidates[i] + "?v=" + Date.now();
+  }
+  setTimeout(next,120);
+})();
+
+/* ===== Typewriter (tactful gag with strikethrough, then erase) ===== */
+(function(){
+  const el = document.getElementById('typewriter-text');
+
+  // [prefix, wrong, right, postfix]
+  const lines = [
+    ["Желаем ", "обычного", "крепкого", " здоровья и бодрого настроя! 💪"],
+    ["Пусть выходные будут ", "обычными", "яркими", " и запоминающимися! ✨"],
+    ["Мангал — ", "дымный", "бездымный", ", а мясо — сочное! 🍖"],
+    ["В делах — ", "пауза", "ускорение", " и уверенные победы! 🚀"]
+  ];
+
+  const typeDelay=70, eraseDelay=45, holdWrong=700, holdLine=1200, gap=260;
+
+  function typeText(text, fromLen){
+    return new Promise(res=>{
+      let i=fromLen??0;
+      function step(){
+        el.textContent = text.slice(0,i+1);
+        i++;
+        if(i<text.length) setTimeout(step,typeDelay); else res();
+      }
+      if((text||"").length===0) res(); else setTimeout(step,typeDelay);
+    });
+  }
+
+  function typePlain(str){ return typeText(str,0); }
+
+  function wrapWrong(prefix, wrong){
+    el.innerHTML = `${prefix}<span class="wrong" id="wrong-span">${wrong}</span>`;
+  }
+
+  function eraseWrongLetters(){
+    return new Promise(res=>{
+      const span = document.getElementById('wrong-span');
+      if(!span) return res();
+      function step(){
+        const t = span.textContent;
+        if(t.length>0){
+          span.textContent = t.slice(0,-1);
+          setTimeout(step, eraseDelay);
+        }else{
+          span.remove(); res();
         }
+      }
+      setTimeout(step, eraseDelay);
+    });
+  }
 
-        // Эффект печатной машинки
-        function typeWriter() {
-            const phrases = [
-                "Сегодня ты — главный по жару и настроению! 🔥",
-                "В баньке — +100°, в делах — +200% к результату! 💪",
-                "Планы — как шампур: только сочные куски! 🍖",
-                "Пусть выходные будут яркими и незабываемыми! 🌟"
-            ];
-            
-            const typewriterElement = document.getElementById('typewriter-text');
-            let phraseIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-            
-            function type() {
-                const currentPhrase = phrases[phraseIndex];
-                
-                if (isDeleting) {
-                    typewriterElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                    charIndex--;
-                } else {
-                    typewriterElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                    charIndex++;
-                }
-                
-                let typeSpeed = isDeleting ? 50 : 100;
-                
-                if (!isDeleting && charIndex === currentPhrase.length) {
-                    typeSpeed = 2000;
-                    isDeleting = true;
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    phraseIndex = (phraseIndex + 1) % phrases.length;
-                    typeSpeed = 500;
-                }
-                
-                setTimeout(type, typeSpeed);
-            }
-            
-            type();
-        }
+  async function playLine([pre, wrong, right, post]){
+    el.textContent=""; await new Promise(r=>setTimeout(r,gap));
+    // Печатаем префикс и неправильное слово «как будто ошибся»
+    await typePlain(pre+wrong);
+    // Зачеркиваем неверное слово, не трогая набранные буквы
+    wrapWrong(pre, wrong);
+    await new Promise(r=>setTimeout(r, holdWrong));
+    // Стираем неверное слово по буквам
+    await eraseWrongLetters();
+    // Печатаем правильное слово и постфикс
+    await typePlain(pre+right);
+    await typeText(pre+right+post, (pre+right).length);
+    await new Promise(r=>setTimeout(r, holdLine));
+  }
 
-        // Создание падающих эмодзи
-        function createFallingEmoji() {
-            const emojis = ['🎉', '🎂', '🎈', '🎁', '✨', '🌟', '💫', '🎊'];
-            const emojiRain = document.getElementById('emojiRain');
-            
-            function dropEmoji() {
-                const emoji = document.createElement('div');
-                emoji.className = 'falling-emoji';
-                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                emoji.style.left = Math.random() * 100 + '%';
-                emoji.style.animationDuration = (3 + Math.random() * 2) + 's';
-                emojiRain.appendChild(emoji);
-                
-                setTimeout(() => {
-                    emoji.remove();
-                }, 5000);
-            }
-            
-            setInterval(dropEmoji, 300);
-        }
+  (async function loop(){
+    let i=0; while(true){ await playLine(lines[i%lines.length]); i++; }
+  })();
+})();
 
-        // Улучшенный салют
-        function createFireworks() {
-            const fireworksContainer = document.createElement('div');
-            fireworksContainer.style.position = 'fixed';
-            fireworksContainer.style.top = '0';
-            fireworksContainer.style.left = '0';
-            fireworksContainer.style.width = '100%';
-            fireworksContainer.style.height = '100%';
-            fireworksContainer.style.pointerEvents = 'none';
-            fireworksContainer.style.zIndex = '1000';
-            document.body.appendChild(fireworksContainer);
-            
-            const colors = [
-                ['#ff6b6b', '#ff8e8e', '#ff3d3d'],
-                ['#4ecdc4', '#7ed3d1', '#2a9d8f'],
-                ['#45b7d1', '#74c7e3', '#1a759f'],
-                ['#96ceb4', '#b4dcc4', '#6b9e8a'],
-                ['#ffeaa7', '#fff2c7', '#e6c876'],
-                ['#fab1a0', '#fcc5b7', '#e76f51'],
-                ['#fd79a8', '#fe9bb8', '#e84393'],
-                ['#a29bfe', '#b7b1fe', '#6d58fe'],
-                ['#6c5ce7', '#8b7ced', '#4834d4'],
-                ['#fdcb6e', '#fed89e', '#e1b12c']
-            ];
-            
-            // Создаем несколько залпов с разной интенсивностью
-            for (let wave = 0; wave < 20; wave++) {
-                setTimeout(() => {
-                    const colorPair = colors[Math.floor(Math.random() * colors.length)];
-                    launchRocket(fireworksContainer, colorPair[0], colorPair[1], colorPair[2]);
-                }, wave * 300);
-            }
-            
-            // Удаляем контейнер через 10 секунд
-            setTimeout(() => {
-                fireworksContainer.remove();
-            }, 10000);
-        }
+/* ===== WebAudio + Haptics ===== */
+const Sound = (function(){
+  let ctx = null;
+  let enabled = false;
 
-        function launchRocket(container, primaryColor, secondaryColor, tertiaryColor) {
-            const startX = 50 + Math.random() * window.innerWidth * 0.6;
-            const startY = window.innerHeight;
-            const targetY = 100 + Math.random() * 300;
-            
-            // Создаем ракету
-            const rocket = document.createElement('div');
-            rocket.style.position = 'absolute';
-            rocket.style.left = startX + 'px';
-            rocket.style.top = startY + 'px';
-            rocket.style.width = '4px';
-            rocket.style.height = '4px';
-            rocket.style.backgroundColor = primaryColor;
-            rocket.style.borderRadius = '50%';
-            rocket.style.boxShadow = `0 0 8px ${primaryColor}`;
-            container.appendChild(rocket);
-            
-            // Анимация полета ракеты
-            let currentY = startY;
-            const speed = 10;
-            const trail = [];
-            
-            const flyUp = () => {
-                currentY -= speed;
-                rocket.style.top = currentY + 'px';
-                
-                // Создаем след
-                if (Math.random() < 0.8) {
-                    const trailParticle = document.createElement('div');
-                    trailParticle.style.position = 'absolute';
-                    trailParticle.style.left = (startX + (Math.random() - 0.5) * 5) + 'px';
-                    trailParticle.style.top = currentY + 'px';
-                    trailParticle.style.width = '3px';
-                    trailParticle.style.height = '3px';
-                    trailParticle.style.backgroundColor = primaryColor;
-                    trailParticle.style.borderRadius = '50%';
-                    trailParticle.style.opacity = '0.9';
-                    container.appendChild(trailParticle);
-                    
-                    // Угасание следа
-                    let opacity = 0.9;
-                    const fadeTrail = () => {
-                        opacity -= 0.04;
-                        trailParticle.style.opacity = opacity;
-                        if (opacity > 0) {
-                            requestAnimationFrame(fadeTrail);
-                        } else {
-                            trailParticle.remove();
-                        }
-                    };
-                    requestAnimationFrame(fadeTrail);
-                }
-                
-                if (currentY > targetY) {
-                    requestAnimationFrame(flyUp);
-                } else {
-                    rocket.remove();
-                    explode(container, startX, currentY, primaryColor, secondaryColor, tertiaryColor);
-                }
-            };
-            
-            requestAnimationFrame(flyUp);
-        }
+  function ensureCtx(){
+    if(!ctx){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(AC) ctx = new AC();
+    }
+    return ctx;
+  }
 
-        function explode(container, x, y, primaryColor, secondaryColor, tertiaryColor) {
-            const particleCount = 80 + Math.random() * 40; // Больше частиц для пышности
-            
-            for (let i = 0; i < particleCount; i++) {
-                createExplosionParticle(container, x, y, primaryColor, secondaryColor, tertiaryColor, i, particleCount);
-            }
-            
-            // Добавляем мерцающий эффект
-            for (let i = 0; i < 20; i++) {
-                createSparkle(container, x + (Math.random() - 0.5) * 50, y + (Math.random() - 0.5) * 50, tertiaryColor);
-            }
-        }
+  function setEnabled(v){
+    enabled = !!v;
+    if(enabled && ctx?.state === 'suspended') ctx.resume();
+  }
 
-        function createExplosionParticle(container, centerX, centerY, primaryColor, secondaryColor, tertiaryColor, index, total) {
-            const particle = document.createElement('div');
-            const size = 2 + Math.random() * 4;
-            
-            particle.style.position = 'absolute';
-            particle.style.left = centerX + 'px';
-            particle.style.top = centerY + 'px';
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.backgroundColor = Math.random() < 0.33 ? primaryColor : Math.random() < 0.5 ? secondaryColor : tertiaryColor;
-            particle.style.borderRadius = Math.random() < 0.5 ? '50%' : '0%'; // Смешиваем круги и квадраты
-            particle.style.boxShadow = `0 0 ${size * 2.5}px ${particle.style.backgroundColor}`;
-            container.appendChild(particle);
-            
-            // Направление взрыва с небольшим хаосом
-            const angle = (index / total) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
-            const velocity = 3 + Math.random() * 8;
-            const gravity = 0.15;
-            const friction = 0.97;
-            
-            let vx = Math.cos(angle) * velocity;
-            let vy = Math.sin(angle) * velocity;
-            let currentX = centerX;
-            let currentY = centerY;
-            let opacity = 1;
-            let currentSize = size;
-            
-            const animate = () => {
-                vx *= friction;
-                vy *= friction;
-                vy += gravity;
-                
-                currentX += vx;
-                currentY += vy;
-                
-                opacity -= 0.015;
-                currentSize *= 0.99;
-                
-                particle.style.left = currentX + 'px';
-                particle.style.top = currentY + 'px';
-                particle.style.opacity = opacity;
-                particle.style.width = currentSize + 'px';
-                particle.style.height = currentSize + 'px';
-                
-                // Создаем дополнительные искры
-                if (Math.random() < 0.15 && opacity > 0.4) {
-                    createSpark(container, currentX, currentY, particle.style.backgroundColor);
-                }
-                
-                if (opacity > 0 && currentSize > 0.1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    particle.remove();
-                }
-            };
-            
-            requestAnimationFrame(animate);
-        }
+  function now(){ return (ctx?ctx.currentTime:0); }
 
-        function createSpark(container, x, y, color) {
-            const spark = document.createElement('div');
-            spark.style.position = 'absolute';
-            spark.style.left = x + 'px';
-            spark.style.top = y + 'px';
-            spark.style.width = '1.5px';
-            spark.style.height = '1.5px';
-            spark.style.backgroundColor = color;
-            spark.style.borderRadius = '50%';
-            spark.style.boxShadow = `0 0 4px ${color}`;
-            container.appendChild(spark);
-            
-            const vx = (Math.random() - 0.5) * 3;
-            const vy = (Math.random() - 0.5) * 3;
-            let sparkX = x;
-            let sparkY = y;
-            let sparkOpacity = 1;
-            
-            const animateSpark = () => {
-                sparkX += vx;
-                sparkY += vy;
-                sparkOpacity -= 0.04;
-                
-                spark.style.left = sparkX + 'px';
-                spark.style.top = sparkY + 'px';
-                spark.style.opacity = sparkOpacity;
-                
-                if (sparkOpacity > 0) {
-                    requestAnimationFrame(animateSpark);
-                } else {
-                    spark.remove();
-                }
-            };
-            
-            requestAnimationFrame(animateSpark);
-        }
+  function playLaunch(){
+    if(!enabled || !ensureCtx()) return;
+    const t = now();
+    // whoosh: noise bandpass
+    const noise = ctx.createBufferSource();
+    const buffer = ctx.createBuffer(1, ctx.sampleRate*0.2, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i] = (Math.random()*2-1)*0.6;
+    noise.buffer = buffer;
 
-        function createSparkle(container, x, y, color) {
-            const sparkle = document.createElement('div');
-            sparkle.style.position = 'absolute';
-            sparkle.style.left = x + 'px';
-            sparkle.style.top = y + 'px';
-            sparkle.style.width = '2px';
-            sparkle.style.height = '2px';
-            sparkle.style.backgroundColor = color;
-            sparkle.style.borderRadius = '50%';
-            sparkle.style.boxShadow = `0 0 6px ${color}`;
-            container.appendChild(sparkle);
-            
-            let opacity = 1;
-            const animateSparkle = () => {
-                opacity -= 0.02;
-                sparkle.style.opacity = opacity;
-                sparkle.style.transform = `scale(${1 + Math.random() * 0.5})`;
-                
-                if (opacity > 0) {
-                    requestAnimationFrame(animateSparkle);
-                } else {
-                    sparkle.remove();
-                }
-            };
-            
-            requestAnimationFrame(animateSparkle);
-        }
+    const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=800; bp.Q.value=0.6;
+    const gain = ctx.createGain(); gain.gain.setValueAtTime(0.0001,t); gain.gain.exponentialRampToValueAtTime(0.35,t+0.02); gain.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
 
-        // Попытка загрузить фото
-        function tryLoadPhoto() {
-            const avatar = document.getElementById('avatar');
-            const initialsSpan = avatar.querySelector('.initials');
-            const candidates = [
-                "./sergey.jpg", "./sergey.JPG", "./sergey.jpeg", "./sergey.JPEG",
-                "./sergey.png", "./sergey.PNG", "./sergey.webp", "./sergey.WEBP",
-                "sergey.jpg", "sergey.JPG", "sergey.jpeg", "sergey.JPEG",
-                "sergey.png", "sergey.PNG", "sergey.webp", "sergey.WEBP",
-                "./photo.jpg", "./photo.JPG", "./photo.jpeg", "./photo.JPEG",
-                "./photo.png", "./photo.PNG", "photo.jpg", "photo.JPG",
-                "./image.jpg", "./image.JPG", "image.jpg", "image.JPG"
-            ];
-            let i = 0;
-            
-            function tryNext() {
-                if (i >= candidates.length) {
-                    console.log('Фото не найдено. Отображаем инициалы.');
-                    return;
-                }
-                
-                const img = new Image();
-                
-                img.onload = function() {
-                    console.log('Фото загружено:', candidates[i]);
-                    initialsSpan.style.display = 'none';
-                    avatar.appendChild(img);
-                    img.style.position = 'absolute';
-                    img.style.top = '0';
-                    img.style.left = '0';
-                    img.style.width = '100%';
-                    img.style.height = '100%';
-                    img.style.objectFit = 'cover';
-                    img.style.borderRadius = '50%';
-                    img.style.zIndex = '0';
-                    
-                    img.style.opacity = '0';
-                    img.style.transition = 'opacity 0.5s ease-in-out';
-                    setTimeout(() => {
-                        img.style.opacity = '1';
-                    }, 50);
-                };
-                
-                img.onerror = function() {
-                    console.log('Не удалось загрузить:', candidates[i]);
-                    i++;
-                    setTimeout(tryNext, 10);
-                };
-                
-                img.src = candidates[i] + "?v=" + Date.now();
-            }
-            
-            setTimeout(tryNext, 100);
-        }
+    noise.connect(bp).connect(gain).connect(ctx.destination);
+    noise.start(t); noise.stop(t+0.25);
+  }
 
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-            typeWriter();
-            createFallingEmoji();
-            tryLoadPhoto();
-            
-            setTimeout(createFireworks, 3000);
-            setTimeout(() => {
-                createFireworks();
-            }, 10000);
-        });
-    </script>
+  function playExplosion(){
+    if(!enabled || !ensureCtx()) return;
+    const t = now();
+
+    // Body: filtered noise burst
+    const noise = ctx.createBufferSource();
+    const buffer = ctx.createBuffer(1, ctx.sampleRate*0.6, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i] = (Math.random()*2-1);
+    noise.buffer = buffer;
+
+    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.setValueAtTime(1800,t); lp.frequency.exponentialRampToValueAtTime(200,t+0.5);
+    const gain = ctx.createGain(); gain.gain.setValueAtTime(0.0001,t); gain.gain.exponentialRampToValueAtTime(0.7,t+0.01); gain.gain.exponentialRampToValueAtTime(0.0001,t+0.6);
+
+    noise.connect(lp).connect(gain).connect(ctx.destination);
+    noise.start(t); noise.stop(t+0.62);
+
+    // Crackles: several quick pops
+    for(let i=0;i<5;i++){
+      const delay = 0.08 + Math.random()*0.22;
+      const osc = ctx.createOscillator(); osc.type='triangle'; osc.frequency.setValueAtTime(180+Math.random()*220,t+delay);
+      const g = ctx.createGain(); g.gain.setValueAtTime(0.0001,t+delay); g.gain.exponentialRampToValueAtTime(0.22,t+delay+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+delay+0.12);
+      osc.connect(g).connect(ctx.destination);
+      osc.start(t+delay); osc.stop(t+delay+0.14);
+    }
+  }
+
+  return { setEnabled, playLaunch, playExplosion, ensureCtx, get enabled(){return enabled} };
+})();
+
+/* ===== Sound toggle UI ===== */
+(function(){
+  const btn = document.getElementById('soundToggle');
+  function refresh(){
+    btn.classList.toggle('sound-on', Sound.enabled);
+    btn.setAttribute('aria-pressed', Sound.enabled ? 'true':'false');
+    btn.querySelector('span').textContent = 'Звук: ' + (Sound.enabled ? 'вкл' : 'выкл');
+  }
+  btn.addEventListener('click', ()=>{
+    Sound.ensureCtx();
+    Sound.setEnabled(!Sound.enabled);
+    refresh();
+  });
+  // первый тап по документу — разрешаем аудио
+  document.addEventListener('pointerdown', ()=>{ if(!Sound.enabled){ Sound.ensureCtx(); } }, {once:true});
+  refresh();
+})();
+
+/* ===== Realistic Fireworks (Canvas, physics, sound, haptics) ===== */
+(function(){
+  const canvas = document.getElementById('fw-canvas');
+  const ctx = canvas.getContext('2d', { alpha:true });
+  let W=0,H=0,DPR=1;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = canvas.width = Math.floor(innerWidth * DPR);
+    H = canvas.height = Math.floor(innerHeight * DPR);
+    canvas.style.width = innerWidth+'px';
+    canvas.style.height = innerHeight+'px';
+  }
+  resize(); addEventListener('resize', resize);
+
+  const rockets = [], particles = [];
+  const MAX_PARTICLES = innerWidth < 480 ? 500 : 900;
+  const GRAV = 0.06 * DPR, FRICTION = 0.985, PFR = 0.972, PGR = 0.075 * DPR;
+
+  function rand(a,b){return Math.random()*(b-a)+a}
+
+  function launch(x){
+    rockets.push({
+      x: (x ?? rand(W*0.2, W*0.8)),
+      y: H + 10,
+      vx: rand(-0.8,0.8),
+      vy: -rand(5.8*DPR, 7.4*DPR),
+      hue: rand(0,360),
+      life: 0, trail:[]
+    });
+    Sound.playLaunch();
+  }
+
+  function burst(x,y,hue){
+    // Haptics
+    if(navigator.vibrate){
+      try{ navigator.vibrate([20, 30, 20]); }catch(e){}
+    }
+    // Sound
+    Sound.playExplosion();
+
+    const count = Math.round(rand(80,130));
+    for(let i=0;i<count;i++){
+      const ang = Math.random()*Math.PI*2;
+      const spd = rand(1.2*DPR, 4.2*DPR);
+      // HSV->RGB lite
+      const s = rand(0.55,0.95), v = rand(0.8,1), hh = (hue+rand(-12,12))/60;
+      const f = (n,k=(n+hh)%6)=>v-v*s*Math.max(Math.min(k,4-k,1),0);
+      const r = Math.floor(f(5)*255), g = Math.floor(f(3)*255), b = Math.floor(f(1)*255);
+      particles.push({
+        x, y, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd,
+        a: 1, size: rand(1.2*DPR, 2.6*DPR),
+        col:`rgba(${r},${g},${b},`, tw: Math.random()<0.2
+      });
+    }
+  }
+
+  function draw(){
+    // trail fade
+    ctx.globalCompositeOperation='destination-out';
+    ctx.fillStyle = `rgba(0,0,0,${innerWidth<480?0.20:0.16})`;
+    ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';
+
+    // rockets
+    for(let i=rockets.length-1;i>=0;i--){
+      const r=rockets[i];
+      r.vy += GRAV; r.x += r.vx; r.y += r.vy; r.life++;
+      r.trail.push([r.x,r.y]); if(r.trail.length>6) r.trail.shift();
+
+      // rocket core
+      ctx.beginPath(); ctx.fillStyle='rgba(255,255,255,.9)'; ctx.arc(r.x,r.y,1.8*DPR,0,Math.PI*2); ctx.fill();
+      // trail
+      for(let t=0;t<r.trail.length-1;t++){
+        const p1=r.trail[t], p2=r.trail[t+1];
+        ctx.strokeStyle = `rgba(255,255,255,${0.15 + t*0.12})`;
+        ctx.lineWidth = (1.2 - t*0.15)*DPR;
+        ctx.beginPath(); ctx.moveTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke();
+      }
+
+      if(r.vy > -0.2 || r.life>140){
+        burst(r.x,r.y,r.hue); rockets.splice(i,1);
+      }
+    }
+
+    // particles
+    for(let i=particles.length-1;i>=0;i--){
+      const p=particles[i];
+      p.vx*=PFR; p.vy=p.vy*PFR + PGR; p.x+=p.vx; p.y+=p.vy;
+      p.a -= 0.012 + Math.random()*0.01;
+      const a = p.tw ? p.a*(0.5+Math.random()*0.5) : p.a;
+      if(a>0){
+        ctx.beginPath(); ctx.fillStyle=p.col + a + ')'; ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();
+      }else{ particles.splice(i,1); }
+    }
+    if(particles.length>MAX_PARTICLES){ particles.splice(0, particles.length-MAX_PARTICLES); }
+
+    requestAnimationFrame(draw);
+  }
+
+  // Manual and auto
+  document.getElementById('fw-btn').addEventListener('click', ()=>{
+    for(let i=0;i<12;i++) setTimeout(()=>launch(), i*120);
+    setTimeout(()=>{for(let i=0;i<8;i++) setTimeout(()=>launch(), i*90);}, 900);
+  });
+
+  function autoWave(dur=8000, interval=850){
+    const id = setInterval(()=>{ const n = innerWidth<480?1:(Math.random()<0.5?1:2); for(let i=0;i<n;i++) setTimeout(()=>launch(), i*140); }, interval);
+    setTimeout(()=>clearInterval(id), dur);
+  }
+
+  draw();
+  setTimeout(()=>{ for(let i=0;i<6;i++) setTimeout(()=>launch(), i*120); }, 1400);
+  setTimeout(()=>autoWave(), 3200);
+  setTimeout(()=>autoWave(), 10500);
+})();
+
+/* ===== DOM ready (no-op: IIFEs already started) ===== */
+</script>
 </body>
 </html>
