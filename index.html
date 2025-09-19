@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e27" />
+  <title>🎉 С днём рождения, Аркадий Андреевич! 🎂</title>
+
+  <!-- Premium, more eye-catching fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800;900&family=Montserrat:wght@600;800;900&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --gold:#ffd700;
+      --gold-2:#ffec99;
+      --pink:#ff4d9d;
+      --blue:#3aa6ff;
+      --cyan:#00e5ff;
+      --lime:#9cff57;
+      --bg1:#0a0e27;
+      --bg2:#171c3d;
+      --ink:#ffffff;
+      --ink-2:#e9edff;
+      --muted:#c7d1ff;
+      --glass:rgba(255,255,255,.12);
+      --glass-b:rgba(255,255,255,.28);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      color:var(--ink);
+      font-family: Manrope, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(80vmax 40vmax at 10% 90%, #2b2f6a 0%, transparent 60%),
+        radial-gradient(70vmax 35vmax at 90% 10%, #2d1e55 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100dvh; overflow-x:hidden; overflow-y:auto;
+    }
+
+    /* Aurora glow */
+    .aurora,.aurora::before,.aurora::after{
+      position:fixed; inset:-20vmax; content:""; z-index:0; pointer-events:none;
+      filter: blur(80px) saturate(120%);
+      background:
+        radial-gradient(45% 35% at 18% 30%, rgba(0,180,240,.25), transparent 60%),
+        radial-gradient(40% 30% at 84% 20%, rgba(255,80,160,.20), transparent 60%),
+        radial-gradient(35% 30% at 52% 82%, rgba(255,215,128,.18), transparent 60%);
+      animation: drift 28s linear infinite;
+    }
+    .aurora::before{ animation-duration: 36s; mix-blend-mode:screen }
+    .aurora::after{ animation-duration: 44s; mix-blend-mode:overlay }
+    @keyframes drift{
+      0%{transform:translate3d(-2%, -1%, 0) rotate(0deg) scale(1.02)}
+      50%{transform:translate3d(2%, 1%, 0) rotate(180deg) scale(1.06)}
+      100%{transform:translate3d(-2%, -1%, 0) rotate(360deg) scale(1.02)}
+    }
+
+    /* Canvases: confetti + BIG fireworks (more visible) */
+    canvas#confetti, canvas#fireworks{
+      position:fixed; inset:0; width:100vw; height:100dvh; pointer-events:none;
+    }
+    #confetti{ z-index:2 }
+    #fireworks{ z-index:3 }
+
+    /* Main container */
+    .container{
+      position:relative; z-index:5;
+      min-height:100dvh; display:flex; align-items:center; justify-content:center;
+      padding:clamp(16px, 4vmin, 48px);
+      padding-bottom: calc(18px + env(safe-area-inset-bottom));
+      perspective:1200px;
+    }
+
+    .card{
+      width:min(900px, 94vw);
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+      border:1px solid var(--glass-b);
+      border-radius:28px;
+      padding:clamp(20px, 5vmin, 44px);
+      backdrop-filter: blur(18px);
+      box-shadow:
+        0 26px 70px rgba(0,0,0,.45),
+        0 0 120px rgba(122,215,255,.18),
+        inset 0 0 0 1px rgba(255,255,255,.06);
+      transform-style:preserve-3d; transition:transform .6s cubic-bezier(.23,1,.32,1);
+      position:relative; overflow:hidden;
+    }
+    .card::before{
+      content:""; position:absolute; inset:-2px; border-radius:30px; padding:2px;
+      background: conic-gradient(from 0deg, #ffd16b, #00e5ff, #ffffff22, #ff4d9d, #9cff57, #ffd16b);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude;
+      animation: borderSpin 8s linear infinite;
+    }
+    @keyframes borderSpin{ to{ filter:hue-rotate(360deg) } }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:.6rem;
+      padding:.55rem 1rem; border-radius:999px;
+      background:linear-gradient(90deg, rgba(255,215,0,.25), rgba(255,255,255,.08));
+      border:1px solid rgba(255,215,0,.65);
+      color:var(--gold); font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+      font-size:.8rem; backdrop-filter: blur(6px);
+    }
+
+    /* Title: bolder + prettier font */
+    h1{
+      margin:12px 0 6px;
+      font-family: Poppins, Montserrat, Manrope, system-ui, sans-serif;
+      font-weight:900; line-height:1.06;
+      font-size: clamp(30px, 7.4vw, 62px);
+      letter-spacing:.01em;
+      background: linear-gradient(45deg, var(--gold), #ff9f6b, var(--pink), var(--cyan), var(--gold));
+      background-size: 220% 220%;
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation: titleGlow 4s ease-in-out infinite;
+      text-shadow: 0 14px 36px rgba(0,0,0,.35);
+      min-height:2.4em;
+    }
+    @keyframes titleGlow{
+      0%,100%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+    }
+
+    .subtitle{
+      margin:2px 0 16px;
+      color:var(--muted);
+      font-family: Montserrat, Manrope, system-ui, sans-serif;
+      font-weight:700; letter-spacing:.02em;
+      font-size: clamp(15px, 3.6vw, 20px);
+      min-height:1.5em;
+    }
+
+    .messages{ display:grid; gap:14px; margin-top:18px }
+    .message-card{
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:18px; padding:14px;
+      position:relative; overflow:hidden; min-height:52px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.05);
+    }
+    .message-card::before{
+      content:""; position:absolute; inset:-60% -60% auto auto; width:200%; height:200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,.10), transparent);
+      transform:rotate(25deg); animation: shimmer 3.2s linear infinite;
+    }
+    @keyframes shimmer{ 0%{transform: translateX(-40%) rotate(25deg)} 100%{transform: translateX(40%) rotate(25deg)} }
+
+    .message-text{
+      font-size: clamp(15px, 3.7vw, 19px);
+      line-height:1.68; color:var(--ink-2);
+    }
+    .highlight{ color:var(--gold-2); font-weight:800; text-shadow:0 0 22px rgba(255,215,0,.45) }
+    .aside{
+      display:inline-block; margin-left:.4em; opacity:.75; font-size:.95em; color:#b7c6ff; font-style:italic;
+    }
+
+    /* cursor for typer */
+    .cursor::after{
+      content:""; display:inline-block; width:.62ch; height:1.06em; margin-left:2px;
+      background: linear-gradient(180deg, #fff, #a6c8ff); border-radius:2px;
+      animation: blink .85s steps(1) infinite; vertical-align:-.15em;
+    }
+    @keyframes blink{ 50%{ opacity:0 } }
+
+    /* Footer */
+    .footer{
+      margin-top:22px; padding-top:14px; border-top:1px dashed rgba(255,255,255,.28);
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; color:#d7e1ff;
+    }
+    .team{ font-weight:800; color:#fff }
+
+    /* 3D hover */
+    #container:hover #card{ transform: rotateX(4deg) rotateY(-3deg) }
+
+    /* Mobile */
+    @media (max-width:540px){
+      .card{ border-radius:22px; padding:18px }
+      .badge{ font-size:.74rem }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .aurora,.aurora::before,.aurora::after{ animation:none }
+    }
+  </style>
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+
+  <!-- Background FX -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <canvas id="fireworks" aria-hidden="true"></canvas>
+
+  <div class="container" id="container">
+    <div class="card" id="card">
+      <div class="badge">⭐ Коллектив ДРНУ ⭐</div>
+
+      <h1 id="title" class="cursor"></h1>
+      <p id="subtitle" class="subtitle cursor"></p>
+
+      <div class="messages">
+        <div class="message-card"><p id="msg1" class="message-text cursor"></p></div>
+        <div class="message-card"><p id="msg2" class="message-text cursor"></p></div>
+        <div class="message-card"><p id="msg3" class="message-text cursor"></p></div>
+        <div class="message-card"><p id="msg4" class="message-text cursor"></p></div>
+      </div>
+
+      <div class="footer">
+        <div class="team">С уважением, команда ДРНУ</div>
+        <div class="date" id="date"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Date =====
+    document.getElementById('date').textContent = new Date().toLocaleDateString('ru-RU',{
+      year:'numeric', month:'long', day:'numeric'
+    });
+
+    // ===== Typer utilities =====
+    const sleep = (ms)=> new Promise(r=>setTimeout(r, ms));
+    const $ = (q)=> document.querySelector(q);
+    function stopCursor(n){ n.classList.remove('cursor') }
+
+    async function typeText(node, text, speed=22, jitter=18){
+      for(let i=0;i<text.length;i++){
+        node.textContent += text[i];
+        await sleep(speed + Math.random()*jitter);
+      }
+    }
+    async function backspace(node, n, speed=14){
+      for(let i=0;i<n;i++){
+        node.textContent = node.textContent.slice(0,-1);
+        await sleep(speed);
+      }
+    }
+
+    // Funny replace: type word -> pause -> erase -> comment (aside) -> final word
+    async function typeReplaceWithGags(node, preText, tries, finalWord, postText, speed=22){
+      // preamble
+      await typeText(node, preText, speed);
+
+      const word = document.createElement('span');
+      node.appendChild(word);
+
+      for(let i=0;i<tries.length;i++){
+        const {text, aside} = tries[i];
+
+        // type wrong/funny word
+        await typeText(word, text, speed+3);
+        await sleep(380);
+
+        // optional aside bubble
+        if(aside){
+          const a = document.createElement('span');
+          a.className = 'aside';
+          a.textContent = ' ('+aside+')';
+          node.appendChild(a);
+          await sleep(650);
+          // erase aside smoothly
+          for(let j=0;j<a.textContent.length;j++){
+            a.textContent = a.textContent.slice(0,-1);
+            await sleep(10);
+          }
+          a.remove();
+        }
+
+        // erase the word
+        await backspace(word, text.length, 12);
+        await sleep(140);
+      }
+
+      // final good word
+      await typeText(word, finalWord, speed);
+      // post
+      await typeText(node, postText, speed);
+    }
+
+    // Another gag in the middle of a sentence
+    async function midGag(node, wrong, right, speed=22){
+      const span = document.createElement('span');
+      node.appendChild(span);
+      await typeText(span, wrong, speed+2);
+      await sleep(420);
+      await backspace(span, wrong.length, 12);
+      await sleep(120);
+      await typeText(span, right, speed);
+    }
+
+    // ===== Main script =====
+    (async function(){
+      const title = $('#title');
+      const sub = $('#subtitle');
+      const m1 = $('#msg1');
+      const m2 = $('#msg2');
+      const m3 = $('#msg3');
+      const m4 = $('#msg4');
+
+      // Title
+      await sleep(350);
+      await typeText(title, 'С днём рождения, ', 26);
+      await typeText(title, 'Аркадий Андреевич!', 30);
+      stopCursor(title); sub.classList.add('cursor'); await sleep(250);
+
+      // Subtitle
+      await typeText(sub, 'Лучший работник и надёжный начальник отдела', 22);
+      stopCursor(sub); await sleep(240);
+
+      // Block 1
+      await typeText(m1, 'От всего коллектива ДРНУ — ', 22);
+      await typeReplaceWithGags(
+        m1,
+        '',
+        [
+          {text:'бурные аплодисменты', aside:'да они и так звучат 👏'},
+          {text:'контрольные звонки', aside:'упс, лишнее'},
+          {text:'строгие отчёты', aside:'не сегодня'}
+        ],
+        'самые тёплые поздравления',
+        '! 🎊',
+        22
+      );
+      stopCursor(m1); await sleep(260);
+
+      // Block 2 (he "interferes" with process, but actually pro)
+      await typeReplaceWithGags(
+        m2,
+        'Ты настолько ответственен, что мы иногда забываем тебя ',
+        [
+          {text:'контролировать', aside:'да и незачем'},
+          {text:'торопить', aside:'он уже всё сделал'},
+          {text:'учить', aside:'ха-ха, это он нас учит'}
+        ],
+        'просто благодарить',
+        '. 💫',
+        21
+      );
+      stopCursor(m2); await sleep(260);
+
+      // Block 3 (mid gag swap)
+      await typeText(m3, 'Благодаря тебе задачи становятся ', 21);
+      await midGag(m3, 'сложнее', 'легче', 21);
+      await typeText(m3, ', сроки — ', 21);
+      await midGag(m3, 'космическими', 'реальными', 21);
+      await typeText(m3, ', а результат — ', 21);
+      await midGag(m3, 'ну, норм', 'впечатляющим', 21);
+      await typeText(m3, '! 🚀', 21);
+      stopCursor(m3); await sleep(240);
+
+      // Block 4
+      await typeText(m4, 'Желаем крепкого ', 21);
+      await typeText(m4, 'здоровья', 21);
+      await typeText(m4, ', семье — ', 21);
+      await typeText(m4, 'благополучия', 21);
+      await typeText(m4, ', и пусть каждый день приносит ', 21);
+      await typeText(m4, 'яркие поводы для радости', 21);
+      await typeText(m4, '! 🌟', 21);
+      stopCursor(m4);
+    })();
+
+    // ===== Confetti (bigger & brighter) =====
+    (function(){
+      const c = document.getElementById('confetti');
+      const ctx = c.getContext('2d');
+      let W,H,DPR;
+
+      function size(){
+        DPR = Math.min(2, devicePixelRatio||1);
+        W = c.width = Math.floor(innerWidth*DPR);
+        H = c.height = Math.floor(innerHeight*DPR);
+        c.style.width = innerWidth+'px';
+        c.style.height = innerHeight+'px';
+      }
+      addEventListener('resize', size, {passive:true}); size();
+
+      const colors = ['#FFD700','#FF4D9D','#00E5FF','#3AA6FF','#9CFF57','#FFA07A','#A78BFA'];
+      const parts = [];
+      const COUNT = innerWidth < 540 ? 110 : 200;
+
+      function spawn(i){
+        const w = (Math.random()*8+6)*DPR, h = (Math.random()*12+8)*DPR;
+        parts[i] = {
+          x: Math.random()*W, y: -Math.random()*H,
+          w,h, r:Math.random()*Math.PI, rv:(Math.random()*0.12+0.02)*(Math.random()<.5?-1:1),
+          vx:(Math.random()*0.8-0.4)*DPR, vy:(Math.random()*1.8+1.6)*DPR,
+          flip: Math.random()*Math.PI,
+          color: colors[(Math.random()*colors.length)|0],
+          shape: ['rect','circ','tri','star'][(Math.random()*4)|0]
+        };
+      }
+      for(let i=0;i<COUNT;i++) spawn(i);
+
+      (function step(){
+        ctx.clearRect(0,0,W,H);
+        for(let i=0;i<parts.length;i++){
+          const p = parts[i];
+          p.y += p.vy; p.x += p.vx; p.r += p.rv; p.flip += .1;
+          const scaleY = (Math.sin(p.flip)+1.2)/2.2;
+
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+          ctx.fillStyle = p.color; ctx.strokeStyle = p.color; ctx.lineWidth = 2;
+
+          switch(p.shape){
+            case 'rect': ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h*scaleY); break;
+            case 'circ': ctx.beginPath(); ctx.arc(0,0,p.w*.45,0,Math.PI*2); ctx.fill(); break;
+            case 'tri':
+              ctx.beginPath();
+              ctx.moveTo(0,-p.h/2); ctx.lineTo(-p.w/2,p.h/2); ctx.lineTo(p.w/2,p.h/2);
+              ctx.closePath(); ctx.fill(); break;
+            case 'star':
+              ctx.beginPath();
+              for(let k=0;k<5;k++){
+                const a=(k*72-90)*Math.PI/180, ax=Math.cos(a)*p.w*.5, ay=Math.sin(a)*p.h*.5;
+                const b=((k*72+36)-90)*Math.PI/180, bx=Math.cos(b)*p.w*.25, by=Math.sin(b)*p.h*.25;
+                k===0?ctx.moveTo(ax,ay):ctx.lineTo(ax,ay); ctx.lineTo(bx,by);
+              } ctx.closePath(); ctx.fill(); break;
+          }
+          ctx.restore();
+
+          if(p.y>H+60*DPR || p.x<-60*DPR || p.x>W+60*DPR){ spawn(i); p.y=-20*DPR }
+        }
+        requestAnimationFrame(step);
+      })();
+    })();
+
+    // ===== Fireworks (much brighter & bigger) =====
+    (function(){
+      const canvas = document.getElementById('fireworks');
+      const ctx = canvas.getContext('2d', { alpha:true });
+      let W,H,DPR;
+
+      function size(){
+        DPR = Math.min(2, devicePixelRatio||1);
+        W = canvas.width = Math.floor(innerWidth*DPR);
+        H = canvas.height = Math.floor(innerHeight*DPR);
+        canvas.style.width = innerWidth+'px';
+        canvas.style.height = innerHeight+'px';
+      }
+      addEventListener('resize', size, {passive:true}); size();
+
+      const rand = (a,b)=> Math.random()*(b-a)+a;
+      const TAU = Math.PI*2;
+
+      // Make fireworks pop: additive blend + thicker trails
+      const rockets=[], parts=[];
+      const gravity = .045*DPR, fric=.985;
+      const hues = [45, 330, 200, 165, 260, 15]; // warm+cool
+
+      function color(h, s=100, l=60, a=1){ return `hsla(${h} ${s}% ${l}% / ${a})` }
+
+      function spawnRocket(x=rand(W*0.15, W*0.85), y=H, targetY=rand(H*0.25, H*0.5)){
+        rockets.push({ x, y, vx:rand(-.9,.9)*DPR, vy:rand(-12.5,-15)*DPR, targetY, hue:hues[(Math.random()*hues.length)|0], trail:[] });
+      }
+
+      function explode(x,y,h){
+        const n = Math.floor((innerWidth<540? 90:150));
+        for(let i=0;i<n;i++){
+          const ang = (i/n)*TAU + rand(-.03,.03);
+          const spd = rand(1.8, 5.2)*DPR;
+          parts.push({
+            x,y, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd,
+            life: rand(70,110), a:1,
+            hue: h+rand(-12,12), size: rand(1.2, 2.6)*DPR, sparkle: Math.random()<.22
+          });
+        }
+        // golden crown
+        for(let i=0;i< (innerWidth<540? 22:34); i++){
+          const a=i/34*TAU;
+          parts.push({
+            x,y, vx:Math.cos(a)*rand(1.4,2.6)*DPR, vy:Math.sin(a)*rand(1.4,2.6)*DPR,
+            life: rand(50,75), a:1, hue: 48, size: 2.2*DPR, sparkle:true
+          });
+        }
+      }
+
+      (function loop(){
+        // fade with slight persistence for glow
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'rgba(0,0,0,0.08)';
+        ctx.fillRect(0,0,W,H);
+
+        // rockets
+        for(let i=rockets.length-1;i>=0;i--){
+          const r=rockets[i];
+          r.trail.push({x:r.x,y:r.y});
+          if(r.trail.length>7) r.trail.shift();
+          r.x+=r.vx; r.y+=r.vy; r.vy+=gravity*.5;
+
+          // trail (additive)
+          ctx.globalCompositeOperation = 'lighter';
+          ctx.beginPath();
+          for(let t=0;t<r.trail.length-1;t++){
+            const a=t/(r.trail.length-1);
+            ctx.strokeStyle = color(r.hue,100,70, .6*a+.2);
+            ctx.lineWidth = (1.6+a*2.6)*DPR;
+            ctx.moveTo(r.trail[t].x, r.trail[t].y);
+            ctx.lineTo(r.trail[t+1].x, r.trail[t+1].y);
+          }
+          ctx.stroke();
+
+          // head
+          ctx.fillStyle = color(r.hue,100,70,1);
+          ctx.beginPath(); ctx.arc(r.x,r.y,2.4*DPR,0,TAU); ctx.fill();
+
+          if(r.vy>=0 || r.y<=r.targetY || Math.random()<.006){
+            explode(r.x,r.y,r.hue);
+            rockets.splice(i,1);
+          }
+        }
+
+        // particles
+        for(let i=parts.length-1;i>=0;i--){
+          const p=parts[i];
+          p.vx*=fric; p.vy=p.vy*fric + gravity;
+          p.x+=p.vx; p.y+=p.vy;
+          p.life--; p.a = Math.max(0, p.life/100);
+
+          ctx.globalCompositeOperation = 'lighter';
+          if(p.sparkle && Math.random()<.18){
+            ctx.fillStyle = 'rgba(255,255,255,.95)';
+            ctx.fillRect(p.x-0.6*DPR,p.y-0.6*DPR,1.2*DPR,1.2*DPR);
+          }
+          ctx.fillStyle = color(p.hue,100,60, p.a);
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,TAU); ctx.fill();
+
+          if(p.a<=0 || p.x<-60 || p.x>W+60 || p.y>H+60) parts.splice(i,1);
+        }
+
+        // spawn rate (more visible)
+        if(Math.random() < (innerWidth<540? .10 : .16)) spawnRocket();
+        requestAnimationFrame(loop);
+      })();
+
+      // opening bouquet
+      for(let i=0;i<(innerWidth<540?3:6);i++) setTimeout(()=>spawnRocket(), i*180);
+    })();
+  </script>
+</body>
+</html>
